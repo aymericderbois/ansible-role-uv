@@ -1,0 +1,10 @@
+*.retry
+*/__pycache__
+*.pyc
+.cache
+
+# python
+.venv
+
+# Jetbrains
+.idea

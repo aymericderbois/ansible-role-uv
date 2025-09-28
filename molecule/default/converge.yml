@@ -1,0 +1,23 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+
+  pre_tasks:
+    - name: Update apt cache.
+      apt: 
+        update_cache: true 
+        cache_valid_time: 600
+      changed_when: false
+      when: ansible_os_family == 'Debian'
+
+  roles:
+    - role: aymericderbois.uv
+
+  post_tasks:
+    - name: Verify uv is working
+      command: "/usr/local/bin/uv --version"
+      changed_when: false
+    - name: Verify uvx is working
+      command: "/usr/local/bin/uvx --version"
+      changed_when: false
