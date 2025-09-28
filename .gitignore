@@ -3,6 +3,9 @@
 *.pyc
 .cache
 
+# Ansible
+.ansible
+
 # python
 .venv
 

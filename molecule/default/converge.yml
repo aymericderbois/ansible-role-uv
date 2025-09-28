@@ -5,8 +5,8 @@
 
   pre_tasks:
     - name: Update apt cache.
-      apt: 
-        update_cache: true 
+      ansible.builtin.apt:
+        update_cache: true
         cache_valid_time: 600
       changed_when: false
       when: ansible_os_family == 'Debian'
@@ -16,8 +16,8 @@
 
   post_tasks:
     - name: Verify uv is working
-      command: "/usr/local/bin/uv --version"
+      ansible.builtin.command: "/usr/local/bin/uv --version"
       changed_when: false
     - name: Verify uvx is working
-      command: "/usr/local/bin/uvx --version"
+      ansible.builtin.command: "/usr/local/bin/uvx --version"
       changed_when: false
