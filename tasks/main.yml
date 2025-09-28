@@ -1,0 +1,89 @@
+---
+- name: Check if uv is already installed
+  stat:
+    path: "{{ uv_install_dir }}/uv"
+  register: uv_binary_stat
+
+- name: Get current uv version if installed
+  command: "{{ uv_install_dir }}/uv --version"
+  register: uv_current_version
+  failed_when: false
+  changed_when: false
+  when: uv_binary_stat.stat.exists
+
+- name: Determine if installation is needed
+  set_fact:
+    uv_needs_install: >-
+      {{ uv_force_install or 
+         not uv_binary_stat.stat.exists or 
+         (uv_current_version.stdout is defined and uv_version not in uv_current_version.stdout) }}
+
+- name: Download uv binary archive
+  get_url:
+    url: "{{ uv_download_base_url }}/{{ uv_version }}/uv-{{ uv_arch }}.tar.gz"
+    dest: "{{ uv_temp_dir }}/uv-{{ uv_version }}.tar.gz"
+    mode: '0644'
+    timeout: "{{ uv_download_timeout }}"
+  when: uv_needs_install
+  retries: 3
+  delay: 5
+
+- name: Extract uv binary archive
+  unarchive:
+    src: "{{ uv_temp_dir }}/uv-{{ uv_version }}.tar.gz"
+    dest: "{{ uv_temp_dir }}"
+    remote_src: true
+    creates: "{{ uv_temp_dir }}/uv-{{ uv_arch }}/uv"
+  when: uv_needs_install
+
+- name: Ensure installation directory exists
+  file:
+    path: "{{ uv_install_dir }}"
+    state: directory
+    mode: '0755'
+  become: true
+
+- name: Install uv binary
+  copy:
+    src: "{{ uv_temp_dir }}/uv-{{ uv_arch }}/uv"
+    dest: "{{ uv_install_dir }}/uv"
+    mode: '0755'
+    owner: root
+    group: root
+    remote_src: true
+  become: true
+  when: uv_needs_install
+  notify: verify uv installation
+
+- name: Install uvx binary
+  copy:
+    src: "{{ uv_temp_dir }}/uv-{{ uv_arch }}/uvx"
+    dest: "{{ uv_install_dir }}/uvx"
+    mode: '0755'
+    owner: root
+    group: root
+    remote_src: true
+  become: true
+  when: uv_needs_install
+  notify: verify uvx installation
+
+- name: Clean up temporary files
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - "{{ uv_temp_dir }}/uv-{{ uv_version }}.tar.gz"
+    - "{{ uv_temp_dir }}/uv-{{ uv_arch }}"
+  when: uv_cleanup_temp_files
+
+- name: Verify uv installation
+  command: "{{ uv_install_dir }}/uv --version"
+  register: uv_verify_result
+  changed_when: false
+  failed_when: uv_version not in uv_verify_result.stdout
+  when: uv_verify_installation and uv_needs_install
+
+- name: Display installed version
+  debug:
+    msg: "uv {{ uv_version }} installed successfully"
+  when: uv_needs_install

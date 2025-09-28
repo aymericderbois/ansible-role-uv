@@ -1,0 +1,29 @@
+---
+galaxy_info:
+  role_name: uv
+  namespace: aymericderbois
+  author: aymericderbois
+  description: Install uv - An extremely fast Python package installer and resolver for Debian systems
+  company: "aymericderbois"
+  license: MIT
+  
+  min_ansible_version: "2.9"
+  
+  platforms:
+    - name: Debian
+      versions:
+        - bullseye
+        - bookworm
+        
+  galaxy_tags:
+    - python
+    - uv
+    - package
+    - manager
+    - installer
+    - resolver
+    - development
+    - tools
+    - debian
+
+dependencies: []

@@ -1,0 +1,27 @@
+---
+# Version d'uv à installer
+uv_version: "0.8.22"
+
+# Architecture à télécharger
+uv_arch: "x86_64-unknown-linux-gnu"
+
+# Répertoire d'installation des binaires
+uv_install_dir: "/usr/local/bin"
+
+# URL de base pour le téléchargement
+uv_download_base_url: "https://github.com/astral-sh/uv/releases/download"
+
+# Force la réinstallation même si déjà installé
+uv_force_install: false
+
+# Répertoire temporaire pour le téléchargement
+uv_temp_dir: "/tmp"
+
+# Délai d'expiration pour le téléchargement (secondes)
+uv_download_timeout: 300
+
+# Vérifier la version après installation
+uv_verify_installation: true
+
+# Nettoyer les fichiers temporaires après installation
+uv_cleanup_temp_files: true
