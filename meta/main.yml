@@ -3,7 +3,9 @@ galaxy_info:
   role_name: uv
   namespace: aymericderbois
   author: aymericderbois
-  description: Install uv - An extremely fast Python package installer and resolver for Debian systems
+  description: >-
+    Install uv - An extremely fast Python package installer and resolver
+    for Debian systems
   company: "aymericderbois"
   license: MIT
 

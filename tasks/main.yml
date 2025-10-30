@@ -16,7 +16,8 @@
     uv_needs_install: >-
       {{ uv_force_install or
          not uv_binary_stat.stat.exists or
-         (uv_current_version.stdout is defined and uv_version not in uv_current_version.stdout) }}
+         (uv_current_version.stdout is defined and
+          uv_version not in uv_current_version.stdout) }}
 
 - name: Download uv binary archive
   ansible.builtin.get_url:
