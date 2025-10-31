@@ -1,0 +1,49 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Check if uv is installed
+      ansible.builtin.command: /usr/local/bin/uv --version
+      changed_when: false
+      register: uv_version
+
+    - name: Display uv version
+      ansible.builtin.debug:
+        var: uv_version.stdout
+
+    - name: Check if uvx is installed
+      ansible.builtin.command: /usr/local/bin/uvx --version
+      changed_when: false
+      register: uvx_version
+
+    - name: Display uvx version
+      ansible.builtin.debug:
+        var: uvx_version.stdout
+
+    - name: Check if uv binary exists
+      ansible.builtin.stat:
+        path: /usr/local/bin/uv
+      register: uv_binary
+
+    - name: Assert uv binary exists and is executable
+      ansible.builtin.assert:
+        that:
+          - uv_binary.stat.exists
+          - uv_binary.stat.executable
+        fail_msg: "uv binary does not exist or is not executable"
+        success_msg: "uv binary exists and is executable"
+
+    - name: Check if uvx binary exists
+      ansible.builtin.stat:
+        path: /usr/local/bin/uvx
+      register: uvx_binary
+
+    - name: Assert uvx binary exists and is executable
+      ansible.builtin.assert:
+        that:
+          - uvx_binary.stat.exists
+          - uvx_binary.stat.executable
+        fail_msg: "uvx binary does not exist or is not executable"
+        success_msg: "uvx binary exists and is executable"

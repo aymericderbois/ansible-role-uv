@@ -11,13 +11,7 @@
       changed_when: false
       when: ansible_os_family == 'Debian'
 
-  roles:
-    - role: aymericderbois.uv
-
-  post_tasks:
-    - name: Verify uv is working
-      ansible.builtin.command: "/usr/local/bin/uv --version"
-      changed_when: false
-    - name: Verify uvx is working
-      ansible.builtin.command: "/usr/local/bin/uvx --version"
-      changed_when: false
+  tasks:
+    - name: Include role
+      ansible.builtin.include_role:
+        name: ansible-role-uv
